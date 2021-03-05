@@ -23,7 +23,9 @@ public:
 	void undo();
 
 private:
-
+	// list<string> lines // TODO: decide
+	int m_row;
+	int m_col;
 };
 
 #endif // STUDENTTEXTEDITOR_H_
