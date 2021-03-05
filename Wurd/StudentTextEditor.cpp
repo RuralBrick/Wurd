@@ -69,7 +69,7 @@ void StudentTextEditor::getPos(int& row, int& col) const {
 	// TODO
 }
 
-void StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
+int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
 	// TODO
 }
 

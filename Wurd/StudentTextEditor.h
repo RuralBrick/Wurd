@@ -19,7 +19,7 @@ public:
 	void insert(char ch);
 	void enter();
 	void getPos(int& row, int& col) const;
-	void getLines(int startRow, int numRows, std::vector<std::string>& lines) const;
+	int getLines(int startRow, int numRows, std::vector<std::string>& lines) const;
 	void undo();
 
 private:
