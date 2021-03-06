@@ -23,7 +23,8 @@ public:
 	void undo();
 
 private:
-	// list<string> lines // TODO: decide
+	// map<int, string*> lineNumbers;
+	// list<string> lines; // TODO: decide
 	int m_row;
 	int m_col;
 };

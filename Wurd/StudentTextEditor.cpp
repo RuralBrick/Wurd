@@ -45,26 +45,39 @@ bool StudentTextEditor::save(std::string file) {
 }
 
 void StudentTextEditor::reset() {
-	// TODO
-}
-
-void StudentTextEditor::move(Dir dir) {
-	// TODO
-}
-
-void StudentTextEditor::del() {
-	// TODO
-}
-
-void StudentTextEditor::backspace() {
-	// TODO
+	// TODO: clear text
+	m_row = 0;
+	m_col = 0;
+	// TODO: clear undo
 }
 
 void StudentTextEditor::insert(char ch) {
-	// TODO
+	// TODO: move over chars after cursor
+	// TODO: insert char at cursor
+	m_col++;
+	// TODO: update undo
 }
 
 void StudentTextEditor::enter() {
+	// TODO: split line at cursor
+	// TODO: move second half of line to next line
+	m_row++;
+	m_col = 0;
+	// TODO: update undo
+}
+
+void StudentTextEditor::del() {
+	// TODO: delete character at cursor, combine with next line, or nothing if invalid
+	// TODO: update undo
+}
+
+void StudentTextEditor::backspace() {
+	// TODO: delete character before cursor, combine with prev line, or nothing if invalid
+	// TODO: update cursor
+	// TODO: update undo
+}
+
+void StudentTextEditor::move(Dir dir) {
 	// TODO
 }
 
