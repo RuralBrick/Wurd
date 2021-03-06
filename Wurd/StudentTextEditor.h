@@ -30,6 +30,7 @@ private:
 	int m_row;
 	int m_col;
 	int m_numLines;
+	void resetCursor();
 };
 
 #endif // STUDENTTEXTEDITOR_H_

@@ -24,16 +24,25 @@ StudentTextEditor::~StudentTextEditor()
 	// TODO
 }
 
+void StudentTextEditor::resetCursor() {
+	m_curLine = m_lines.begin();
+	m_row = 0;
+	m_col = 0;
+}
+
 bool StudentTextEditor::load(std::string file) {
 	ifstream infile(file);
 	if (!infile)
 		return false;
+	reset();
 	string line;
 	while (getline(infile, line)) {
 		line.erase(remove(line.begin(), line.end(), '\r'), line.end());
 		line.erase(remove(line.begin(), line.end(), '\n'), line.end());
-		// TODO: Remove \r, \n and store lines
+		m_lines.push_back(line);
+		m_numLines++;
 	}
+	resetCursor();
 	return true;
 }
 
@@ -41,16 +50,16 @@ bool StudentTextEditor::save(std::string file) {
 	ofstream outfile(file);
 	if (!outfile)
 		return false;
-	// TODO: Add \n and write lines
-	// TODO: endl instead of \n?
+	for (auto it = m_lines.begin(); it != m_lines.end(); ++it)
+		outfile << *it << '\n';
 	return true;
 }
 
 void StudentTextEditor::reset() {
-	// TODO: clear text
-	m_row = 0;
-	m_col = 0;
-	// TODO: clear undo
+	m_lines.clear();
+	resetCursor();
+	m_numLines = 0;
+	getUndo()->clear();
 }
 
 void StudentTextEditor::insert(char ch) {
