@@ -71,11 +71,14 @@ void StudentTextEditor::insert(char ch) {
 }
 
 void StudentTextEditor::enter() {
-	// TODO: split line at cursor
-	// TODO: move second half of line to next line
+	auto curLinePtr = m_curLine;
+	string newLine = curLinePtr->substr(m_col);
+	curLinePtr->erase(m_col);
+	m_curLine = m_lines.insert(++curLinePtr, newLine);
+	getUndo()->submit(Undo::Action::SPLIT, m_row, m_col);
 	m_row++;
 	m_col = 0;
-	// TODO: update undo
+	m_numLines++;
 }
 
 void StudentTextEditor::del() {
