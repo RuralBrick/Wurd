@@ -30,6 +30,7 @@ void StudentTextEditor::resetCursor() {
 	m_col = 0;
 }
 
+// TODO: Bug both here and in sample when loading empty file
 bool StudentTextEditor::load(std::string file) {
 	ifstream infile(file);
 	if (!infile)
