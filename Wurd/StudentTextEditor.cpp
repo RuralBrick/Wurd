@@ -117,7 +117,48 @@ void StudentTextEditor::backspace() {
 }
 
 void StudentTextEditor::move(Dir dir) {
-	// TODO
+	switch (dir) {
+	case Dir::UP:
+		if (m_row > 0) {
+			m_curLine--;
+			m_row--;
+			if (m_col > m_curLine->size())
+				m_col = m_curLine->size();
+		}
+		break;
+	case Dir::DOWN:
+		if (m_row < m_numLines - 1) {
+			m_curLine++;
+			m_row++;
+			if (m_col > m_curLine->size())
+				m_col = m_curLine->size();
+		}
+		break;
+	case Dir::LEFT:
+		if (m_col > 0)
+			m_col--;
+		else if (m_row > 0) {
+			m_curLine--;
+			m_row--;
+			m_col = m_curLine->size();
+		}
+		break;
+	case Dir::RIGHT:
+		if (m_col < m_curLine->size())
+			m_col++;
+		else if (m_row < m_numLines - 1) {
+			m_curLine++;
+			m_row++;
+			m_col = 0;
+		}
+		break;
+	case Dir::HOME:
+		m_col = 0;
+		break;
+	case Dir::END:
+		m_col = m_curLine->size();
+		break;
+	}
 }
 
 void StudentTextEditor::getPos(int& row, int& col) const {
