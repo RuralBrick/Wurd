@@ -2,6 +2,8 @@
 #define STUDENTTEXTEDITOR_H_
 
 #include "TextEditor.h"
+#include <string>
+#include <list>
 
 class Undo;
 
@@ -23,10 +25,11 @@ public:
 	void undo();
 
 private:
-	// map<int, string*> lineNumbers;
-	// list<string> lines; // TODO: decide
+	std::list<std::string> m_lines;
+	std::list<std::string>::iterator m_curLine;
 	int m_row;
 	int m_col;
+	int m_numLines;
 };
 
 #endif // STUDENTTEXTEDITOR_H_
