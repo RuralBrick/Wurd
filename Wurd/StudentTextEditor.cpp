@@ -13,7 +13,8 @@ TextEditor* createTextEditor(Undo* un)
 }
 
 StudentTextEditor::StudentTextEditor(Undo* undo)
- : TextEditor(undo), m_row(0), m_col(0), m_numLines(0) {
+ : TextEditor(undo), m_row(0), m_col(0), m_numLines(1) {
+	m_lines.push_back("");
 	m_curLine = m_lines.begin();
 	// TODO
 }
@@ -53,10 +54,10 @@ void StudentTextEditor::reset() {
 }
 
 void StudentTextEditor::insert(char ch) {
-	// TODO: move over chars after cursor
-	// TODO: insert char at cursor
+	string& curLine = *m_curLine;
+	curLine.insert(m_col, 1, ch);
+	getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 	m_col++;
-	// TODO: update undo
 }
 
 void StudentTextEditor::enter() {
