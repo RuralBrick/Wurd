@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 using namespace std;
 
 TextEditor* createTextEditor(Undo* un)
@@ -27,6 +28,8 @@ bool StudentTextEditor::load(std::string file) {
 		return false;
 	string line;
 	while (getline(infile, line)) {
+		line.erase(remove(line.begin(), line.end(), '\r'), line.end());
+		line.erase(remove(line.begin(), line.end(), '\n'), line.end());
 		// TODO: Remove \r, \n and store lines
 	}
 	return true;
