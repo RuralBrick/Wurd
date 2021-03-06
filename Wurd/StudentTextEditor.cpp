@@ -13,7 +13,8 @@ TextEditor* createTextEditor(Undo* un)
 }
 
 StudentTextEditor::StudentTextEditor(Undo* undo)
- : TextEditor(undo), m_row(0), m_col(0) {
+ : TextEditor(undo), m_row(0), m_col(0), m_numLines(0) {
+	m_curLine = m_lines.begin();
 	// TODO
 }
 
@@ -82,11 +83,40 @@ void StudentTextEditor::move(Dir dir) {
 }
 
 void StudentTextEditor::getPos(int& row, int& col) const {
-	// TODO
+	row = m_row;
+	col = m_col;
 }
 
 int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
-	// TODO
+	if (startRow < 0 || numRows < 0 || startRow > m_numLines)
+		return -1;
+
+	auto startRowPtr = m_curLine;
+	int curRow = m_row;
+	if (curRow > startRow) {
+		while (curRow > startRow) {
+			startRowPtr--;
+			curRow--;
+		}
+	}
+	else {
+		while (curRow < startRow) {
+			startRowPtr++;
+			curRow++;
+		}
+	}
+
+	lines.clear();
+
+	int linesCopied = 0;
+	while (startRowPtr != m_lines.end() && curRow < m_numLines && linesCopied < numRows) {
+		lines.push_back(*startRowPtr);
+		startRowPtr++;
+		curRow++;
+		linesCopied++;
+	}
+
+	return linesCopied;
 }
 
 void StudentTextEditor::undo() {
