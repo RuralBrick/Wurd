@@ -98,9 +98,22 @@ void StudentTextEditor::del() {
 }
 
 void StudentTextEditor::backspace() {
-	// TODO: delete character before cursor, combine with prev line, or nothing if invalid
-	// TODO: update cursor
-	// TODO: update undo
+	if (m_col > 0) {
+		char deletedChar = m_curLine->at(m_col);
+		m_curLine->erase(m_col, 1);
+		m_col--;
+		getUndo()->submit(Undo::Action::DELETE, m_row, m_col, deletedChar);
+	}
+	else if (m_row > 0) {
+		auto curLinePtr = m_curLine--;
+		m_row--;
+		m_col = m_curLine->size();
+		string curLine = *curLinePtr;
+		m_curLine->append(curLine);
+		m_lines.erase(curLinePtr);
+		m_numLines--;
+		getUndo()->submit(Undo::Action::JOIN, m_row, m_col);
+	}
 }
 
 void StudentTextEditor::move(Dir dir) {
