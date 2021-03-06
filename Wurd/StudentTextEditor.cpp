@@ -66,8 +66,8 @@ void StudentTextEditor::reset() {
 void StudentTextEditor::insert(char ch) {
 	string& curLine = *m_curLine;
 	curLine.insert(m_col, 1, ch);
-	getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 	m_col++;
+	getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 }
 
 void StudentTextEditor::enter() {
