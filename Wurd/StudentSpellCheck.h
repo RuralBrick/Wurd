@@ -20,10 +20,10 @@ private:
 		std::vector<Node*> children;
 	};
 	Node* m_wordTrie;
-	Node* createNode(char letter) const;
-	void deleteNode(Node* node) const;
+	Node* createNode(char letter);
+	void deleteNode(Node* node);
 	void resetTrie();
-	Node* genNextNode(Node* curNode, char letter) const;
+	Node* genNextNode(Node* curNode, char letter);
 	void printTrie(Node* node) const;
 };
 

@@ -19,13 +19,13 @@ StudentSpellCheck::~StudentSpellCheck() {
 	deleteNode(m_wordTrie);
 }
 
-StudentSpellCheck::Node* StudentSpellCheck::createNode(char letter) const {
+StudentSpellCheck::Node* StudentSpellCheck::createNode(char letter) {
 	Node* newNode = new Node;
 	newNode->letter = letter;
 	return newNode;
 }
 
-void StudentSpellCheck::deleteNode(Node* node) const {
+void StudentSpellCheck::deleteNode(Node* node) {
 	if (node == nullptr)
 		return;
 	for (auto child : node->children)
@@ -44,7 +44,7 @@ void StudentSpellCheck::resetTrie() {
 	m_wordTrie = createNode('\0');
 }
 
-StudentSpellCheck::Node* StudentSpellCheck::genNextNode(Node* curNode, char letter) const {
+StudentSpellCheck::Node* StudentSpellCheck::genNextNode(Node* curNode, char letter) {
 	for (auto child : curNode->children)
 		if (child->letter == letter)
 			return child;
