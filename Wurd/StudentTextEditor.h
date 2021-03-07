@@ -3,6 +3,7 @@
 
 #include "TextEditor.h"
 #include <string>
+#include <vector>
 #include <list>
 
 class Undo;
