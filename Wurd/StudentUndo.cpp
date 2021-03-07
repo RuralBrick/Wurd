@@ -6,7 +6,25 @@ Undo* createUndo()
 }
 
 void StudentUndo::submit(const Action action, int row, int col, char ch) {
-    // TODO: Implement batching feature
+    if (!m_editorActions.empty()) {
+        Entry& prevAction = m_editorActions.top();
+        if (prevAction.action == Undo::Action::DELETE && prevAction.row == row) {
+            if (prevAction.col == col) {
+                prevAction.text.push_back(ch);
+                return;
+            }
+            else if (prevAction.col == col + 1) {
+                prevAction.col--;
+                prevAction.text.insert(0, 1, ch);
+                return;
+            }
+        }
+        else if (prevAction.action == Undo::Action::INSERT && prevAction.row == row
+                 && prevAction.col + prevAction.count == col) {
+            prevAction.count++;
+            return;
+        }
+    }
     Entry newAction;
     newAction.action = action;
     newAction.row = row;
