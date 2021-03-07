@@ -51,5 +51,6 @@ StudentUndo::Action StudentUndo::get(int &row, int &col, int& count, std::string
 }
 
 void StudentUndo::clear() {
-	// TODO
+    while (!m_editorActions.empty())
+        m_editorActions.pop();
 }
