@@ -186,24 +186,28 @@ void StudentTextEditor::getPos(int& row, int& col) const {
 	col = m_col;
 }
 
+void StudentTextEditor::moveToRow(list<string>::iterator& it, int& row, int targetRow) const {
+	if (row > targetRow) {
+		while (row > targetRow) {
+			it--;
+			row--;
+		}
+	}
+	else {
+		while (row < targetRow) {
+			it++;
+			row++;
+		}
+	}
+}
+
 int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
 	if (startRow < 0 || numRows < 0 || startRow > m_numLines)
 		return -1;
 
 	auto startRowPtr = m_curLine;
 	int curRow = m_row;
-	if (curRow > startRow) {
-		while (curRow > startRow) {
-			startRowPtr--;
-			curRow--;
-		}
-	}
-	else {
-		while (curRow < startRow) {
-			startRowPtr++;
-			curRow++;
-		}
-	}
+	moveToRow(startRowPtr, curRow, startRow);
 
 	lines.clear();
 
@@ -218,6 +222,14 @@ int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::stri
 	return linesCopied;
 }
 
+void StudentTextEditor::moveCursor(int row, int col) {
+	moveToRow(m_curLine, m_row, row);
+	if (col > m_curLine->size())
+		m_col = m_curLine->size();
+	else
+		m_col = col;
+}
+
 void StudentTextEditor::undo() {
 	int row = m_row;
 	int col = m_col;
@@ -225,29 +237,23 @@ void StudentTextEditor::undo() {
 	string text;
 	switch (getUndo()->get(row, col, count, text)) {
 	case Undo::Action::INSERT:
-		m_row = row;
-		m_col = col;
+		moveCursor(row, col);
 		for (auto it = text.begin(); it != text.end(); ++it)
-			insert(*it);
+			insertAtCursor(*it);
 		break;
 	case Undo::Action::DELETE:
-		m_row = row;
-		m_col = col;
+		moveCursor(row, col);
 		for (int i = 0; i < count; ++i)
-			del();
+			eraseAtCursor();
 		break;
 	case Undo::Action::SPLIT:
-		m_row = row;
-		m_col = col;
-		enter();
-		m_curLine--;
+		moveCursor(row, col);
+		splitAtCursor();
 		break;
 	case Undo::Action::JOIN:
-		m_row = row;
-		m_col = col;
-		del();
+		moveCursor(row, col);
+		joinAtCursor();
 		break;
 	}
-	m_row = row;
-	m_col = col;
+	moveCursor(row, col);
 }

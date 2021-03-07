@@ -32,6 +32,8 @@ private:
 	int m_col;
 	int m_numLines;
 	void resetCursor();
+	void moveToRow(std::list<std::string>::iterator& it, int& row, int targetRow) const;
+	void moveCursor(int row, int col);
 	void insertAtCursor(char ch);
 	char eraseAtCursor();
 	void splitAtCursor();
