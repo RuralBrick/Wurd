@@ -60,7 +60,7 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 	resetTrie();
 	string word;
 	while (getline(infile, word)) {
-		word.erase(remove_if(word.begin(), word.end(), [](char ch) { return !(isalpha(ch) || ch == ','); }), word.end());
+		word.erase(remove_if(word.begin(), word.end(), [](char ch) { return !(isalpha(ch) || ch == '\''); }), word.end());
 		if (word.size() >= 1) {
 			char curLetter = tolower(word.front());
 			Node* curNode = findNextNode(m_wordTrie, curLetter);
