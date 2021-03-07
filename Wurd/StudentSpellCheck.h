@@ -20,7 +20,6 @@ private:
 		std::vector<Node*> children;
 	};
 	Node* m_wordTrie;
-	bool isNotAlphaApos(char ch) const;
 	Node* createNode(char letter) const;
 	void deleteNode(Node* node) const;
 	void resetTrie();

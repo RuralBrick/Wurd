@@ -19,10 +19,6 @@ StudentSpellCheck::~StudentSpellCheck() {
 	deleteNode(m_wordTrie);
 }
 
-bool StudentSpellCheck::isNotAlphaApos(char ch) const {
-	return !(isalpha(ch) || ch == '\'');
-}
-
 StudentSpellCheck::Node* StudentSpellCheck::createNode(char letter) const {
 	Node* newNode = new Node;
 	newNode->letter = letter;
@@ -58,7 +54,7 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 	resetTrie();
 	string word;
 	while (getline(infile, word)) {
-		word.erase(remove_if(word.begin(), word.end(), isNotAlphaApos), word.end());
+		word.erase(remove_if(word.begin(), word.end(), [](char ch) { return !(isalpha(ch) || ch == ','); }), word.end());
 		if (word.size() >= 1) {
 			char curLetter = tolower(word.front());
 			Node* curNode = findNextNode(m_wordTrie, curLetter);
