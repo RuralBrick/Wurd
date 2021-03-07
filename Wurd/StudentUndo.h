@@ -20,7 +20,7 @@ private:
 		int count;
 		std::string text;
 	};
-	std::stack<Entry> m_actions;
+	std::stack<Entry> m_editorActions;
 };
 
 #endif // STUDENTUNDO_H_
