@@ -33,10 +33,10 @@ void StudentSpellCheck::deleteNode(Node* node) const {
 	delete node;
 }
 
-void StudentSpellCheck::printNode(Node* node) const {
+void StudentSpellCheck::printTrie(Node* node) const {
 	cerr << node->letter << ',';
 	for (auto child : node->children)
-		printNode(child);
+		printTrie(child);
 }
 
 void StudentSpellCheck::resetTrie() {
