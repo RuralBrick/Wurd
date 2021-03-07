@@ -16,7 +16,20 @@ void StudentUndo::submit(const Action action, int row, int col, char ch) {
 }
 
 StudentUndo::Action StudentUndo::get(int &row, int &col, int& count, std::string& text) {
-    return Action::ERROR;  // TODO
+    if (m_editorActions.empty())
+        return Undo::Action::ERROR;
+    Entry undoAction = m_editorActions.top();
+    m_editorActions.pop();
+    switch (undoAction.action) {
+    case Undo::Action::INSERT:
+        break;
+    case Undo::Action::DELETE:
+        break;
+    case Undo::Action::SPLIT:
+        break;
+    case Undo::Action::JOIN:
+        break;
+    }
 }
 
 void StudentUndo::clear() {
