@@ -224,6 +224,7 @@ void StudentTextEditor::undo() {
 		m_row = row;
 		m_col = col;
 		enter();
+		m_curLine--;
 		break;
 	case Undo::Action::JOIN:
 		m_row = row;
@@ -231,4 +232,6 @@ void StudentTextEditor::undo() {
 		del();
 		break;
 	}
+	m_row = row;
+	m_col = col;
 }
