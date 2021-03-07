@@ -23,7 +23,7 @@ private:
 	Node* createNode(char letter);
 	void deleteNode(Node* node);
 	void resetTrie();
-	Node* genNextNode(Node* curNode, char letter);
+	Node* giveNextNode(Node* curNode, char letter);
 	void printTrie(Node* node) const;
 };
 

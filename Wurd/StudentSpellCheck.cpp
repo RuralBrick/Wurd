@@ -44,7 +44,7 @@ void StudentSpellCheck::resetTrie() {
 	m_wordTrie = createNode('\0');
 }
 
-StudentSpellCheck::Node* StudentSpellCheck::genNextNode(Node* curNode, char letter) {
+StudentSpellCheck::Node* StudentSpellCheck::giveNextNode(Node* curNode, char letter) {
 	for (auto child : curNode->children)
 		if (child->letter == letter)
 			return child;
@@ -63,12 +63,12 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 		word.erase(remove_if(word.begin(), word.end(), [](char ch) { return !(isalpha(ch) || ch == '\''); }), word.end());
 		if (word.size() >= 1) {
 			char curLetter = tolower(word.front());
-			Node* curNode = genNextNode(m_wordTrie, curLetter);
+			Node* curNode = giveNextNode(m_wordTrie, curLetter);
 			for (auto it = word.begin() + 1; it != word.end(); ++it) {
 				curLetter = tolower(*it);
-				curNode = genNextNode(curNode, curLetter);
+				curNode = giveNextNode(curNode, curLetter);
 			}
-			genNextNode(curNode, '.');
+			giveNextNode(curNode, '.');
 		}
 	}
 	return true;
