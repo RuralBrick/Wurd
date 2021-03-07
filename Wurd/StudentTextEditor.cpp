@@ -63,45 +63,60 @@ void StudentTextEditor::reset() {
 	getUndo()->clear();
 }
 
+void StudentTextEditor::insertAtCursor(char ch) {
+	m_curLine->insert(m_col, 1, ch);
+	m_col++;
+}
+
 void StudentTextEditor::insert(char ch) {
-	string& curLine = *m_curLine;
 	if (ch == '\t') {
-		curLine.insert(m_col, "    ");
 		for (int i = 0; i < 4; ++i) {
-			m_col++;
+			insertAtCursor(' ');
 			getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ' ');
 		}
 	}
 	else {
-		curLine.insert(m_col, 1, ch);
-		m_col++;
+		insertAtCursor(ch);
 		getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 	}
 }
 
-void StudentTextEditor::enter() {
+void StudentTextEditor::splitAtCursor() {
 	auto curLinePtr = m_curLine;
 	string newLine = curLinePtr->substr(m_col);
 	curLinePtr->erase(m_col);
 	m_curLine = m_lines.insert(++curLinePtr, newLine);
+}
+
+void StudentTextEditor::enter() {
+	splitAtCursor();
 	getUndo()->submit(Undo::Action::SPLIT, m_row, m_col);
 	m_row++;
 	m_col = 0;
 	m_numLines++;
 }
 
+char StudentTextEditor::eraseAtCursor() {
+	char deletedChar = m_curLine->at(m_col);
+	m_curLine->erase(m_col, 1);
+	return deletedChar;
+}
+
+void StudentTextEditor::joinAtCursor() {
+	auto nextLinePtr = m_curLine;
+	string nextLine = *(++nextLinePtr);
+	m_curLine->append(nextLine);
+	m_lines.erase(nextLinePtr);
+	m_numLines--;
+}
+
 void StudentTextEditor::del() {
 	if (m_col < m_curLine->size()) {
-		char deletedChar = m_curLine->at(m_col);
-		m_curLine->erase(m_col, 1);
+		char deletedChar = eraseAtCursor();
 		getUndo()->submit(Undo::Action::DELETE, m_row, m_col, deletedChar);
 	}
 	else if (m_row < m_numLines - 1) {
-		auto nextLinePtr = m_curLine;
-		string nextLine = *(++nextLinePtr);
-		m_curLine->append(nextLine);
-		m_lines.erase(nextLinePtr);
-		m_numLines--;
+		joinAtCursor();
 		getUndo()->submit(Undo::Action::JOIN, m_row, m_col);
 	}
 }
@@ -109,18 +124,14 @@ void StudentTextEditor::del() {
 void StudentTextEditor::backspace() {
 	if (m_col > 0) {
 		m_col--;
-		char deletedChar = m_curLine->at(m_col);
-		m_curLine->erase(m_col, 1);
+		char deletedChar = eraseAtCursor();
 		getUndo()->submit(Undo::Action::DELETE, m_row, m_col, deletedChar);
 	}
 	else if (m_row > 0) {
-		auto curLinePtr = m_curLine--;
+		m_curLine--;
 		m_row--;
 		m_col = m_curLine->size();
-		string curLine = *curLinePtr;
-		m_curLine->append(curLine);
-		m_lines.erase(curLinePtr);
-		m_numLines--;
+		joinAtCursor();
 		getUndo()->submit(Undo::Action::JOIN, m_row, m_col);
 	}
 }

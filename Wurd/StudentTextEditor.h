@@ -32,6 +32,10 @@ private:
 	int m_col;
 	int m_numLines;
 	void resetCursor();
+	void insertAtCursor(char ch);
+	char eraseAtCursor();
+	void splitAtCursor();
+	void joinAtCursor();
 };
 
 #endif // STUDENTTEXTEDITOR_H_
