@@ -67,13 +67,16 @@ void StudentTextEditor::insert(char ch) {
 	string& curLine = *m_curLine;
 	if (ch == '\t') {
 		curLine.insert(m_col, "    ");
-		m_col += 4;
+		for (int i = 0; i < 4; ++i) {
+			m_col++;
+			getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ' ');
+		}
 	}
 	else {
 		curLine.insert(m_col, 1, ch);
 		m_col++;
+		getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 	}
-	getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 }
 
 void StudentTextEditor::enter() {
