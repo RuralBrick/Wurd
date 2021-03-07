@@ -65,8 +65,14 @@ void StudentTextEditor::reset() {
 
 void StudentTextEditor::insert(char ch) {
 	string& curLine = *m_curLine;
-	curLine.insert(m_col, 1, ch);
-	m_col++;
+	if (ch == '\t') {
+		curLine.insert(m_col, "    ");
+		m_col += 4;
+	}
+	else {
+		curLine.insert(m_col, 1, ch);
+		m_col++;
+	}
 	getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
 }
 
