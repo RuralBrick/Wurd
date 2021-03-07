@@ -208,7 +208,9 @@ int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::stri
 }
 
 void StudentTextEditor::undo() {
-	int row, col, count;
+	int row = m_row;
+	int col = m_col;
+	int count = 1;
 	string text;
 	switch (getUndo()->get(row, col, count, text)) {
 	case Undo::Action::INSERT:
