@@ -71,13 +71,13 @@ void StudentTextEditor::insertAtCursor(char ch) {
 void StudentTextEditor::insert(char ch) {
 	if (ch == '\t') {
 		for (int i = 0; i < 4; ++i) {
-			insertAtCursor(' ');
 			getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ' ');
+			insertAtCursor(' ');
 		}
 	}
 	else {
-		insertAtCursor(ch);
 		getUndo()->submit(Undo::Action::INSERT, m_row, m_col, ch);
+		insertAtCursor(ch);
 	}
 }
 
