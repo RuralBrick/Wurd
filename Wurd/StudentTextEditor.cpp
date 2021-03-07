@@ -99,9 +99,9 @@ void StudentTextEditor::del() {
 
 void StudentTextEditor::backspace() {
 	if (m_col > 0) {
+		m_col--;
 		char deletedChar = m_curLine->at(m_col);
 		m_curLine->erase(m_col, 1);
-		m_col--;
 		getUndo()->submit(Undo::Action::DELETE, m_row, m_col, deletedChar);
 	}
 	else if (m_row > 0) {
