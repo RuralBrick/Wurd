@@ -23,14 +23,31 @@ StudentUndo::Action StudentUndo::get(int &row, int &col, int& count, std::string
     m_editorActions.pop();
     switch (undoAction.action) {
     case Undo::Action::INSERT:
-        break;
+        row = undoAction.row;
+        col = undoAction.col;
+        count = undoAction.count;
+        text = "";
+        return Undo::Action::DELETE;
     case Undo::Action::DELETE:
-        break;
+        row = undoAction.row;
+        col = undoAction.col;
+        count = 1;
+        text = undoAction.text;
+        return Undo::Action::INSERT;
     case Undo::Action::SPLIT:
-        break;
+        row = undoAction.row;
+        col = undoAction.col;
+        count = 1;
+        text = "";
+        return Undo::Action::JOIN;
     case Undo::Action::JOIN:
-        break;
+        row = undoAction.row;
+        col = undoAction.col;
+        count = 1;
+        text = "";
+        return Undo::Action::SPLIT;
     }
+    return Undo::Action::ERROR;
 }
 
 void StudentUndo::clear() {
