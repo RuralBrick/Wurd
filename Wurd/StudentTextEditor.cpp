@@ -200,4 +200,16 @@ int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::stri
 
 void StudentTextEditor::undo() {
 	// TODO
+	int row, col, count;
+	string text;
+	switch (getUndo()->get(row, col, count, text)) {
+	case Undo::Action::INSERT:
+		break;
+	case Undo::Action::DELETE:
+		break;
+	case Undo::Action::SPLIT:
+		break;
+	case Undo::Action::JOIN:
+		break;
+	}
 }
