@@ -205,17 +205,30 @@ int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::stri
 }
 
 void StudentTextEditor::undo() {
-	// TODO
 	int row, col, count;
 	string text;
 	switch (getUndo()->get(row, col, count, text)) {
 	case Undo::Action::INSERT:
+		m_row = row;
+		m_col = col;
+		for (auto it = text.begin(); it != text.end(); ++it)
+			insert(*it);
 		break;
 	case Undo::Action::DELETE:
+		m_row = row;
+		m_col = col;
+		for (int i = 0; i < count; ++i)
+			del();
 		break;
 	case Undo::Action::SPLIT:
+		m_row = row;
+		m_col = col;
+		enter();
 		break;
 	case Undo::Action::JOIN:
+		m_row = row;
+		m_col = col;
+		del();
 		break;
 	}
 }
