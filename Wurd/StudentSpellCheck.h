@@ -24,6 +24,7 @@ private:
 	void deleteNode(Node* node) const;
 	void resetTrie();
 	Node* findNextNode(Node* curNode, char letter) const;
+	void printNode(Node* node) const;
 };
 
 #endif  // STUDENTSPELLCHECK_H_
