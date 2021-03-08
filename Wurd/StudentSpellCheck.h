@@ -25,7 +25,10 @@ private:
 	void resetTrie();
 	Node* giveNextNode(Node* curNode, char letter);
 	void printTrie(Node* node) const;
+	std::vector<Node*>::iterator findChildWithChar(Node* node, char ch) const;
 	bool checkInDict(Node* curNode, std::string::const_iterator wordBegin, std::string::const_iterator wordEnd) const;
+	std::vector<std::string> findSuggestions(Node* curNode, std::string curWord,
+		std::string::const_iterator wordBegin, std::string::const_iterator wordEnd, bool foundDiffer) const;
 };
 
 #endif  // STUDENTSPELLCHECK_H_

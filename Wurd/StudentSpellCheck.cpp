@@ -74,23 +74,52 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 	return true;
 }
 
-bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::vector<std::string>& suggestions) {
-	return false; // TODO
+inline
+std::vector<StudentSpellCheck::Node*>::iterator StudentSpellCheck::findChildWithChar(Node* node, char ch) const {
+	return find_if(node->children.begin(), node->children.end(), [ch](Node* n) { return n->letter == ch; });
 }
 
 bool StudentSpellCheck::checkInDict(Node* curNode, std::string::const_iterator wordBegin, std::string::const_iterator wordEnd) const {
-	auto childrenBegin = curNode->children.begin();
-	auto childrenEnd = curNode->children.end();
 	if (wordBegin == wordEnd) {
-		if (find_if(childrenBegin, childrenEnd, [](Node* node) { return node->letter == '.'; }) == childrenEnd)
+		if (findChildWithChar(curNode, '.') == curNode->children.end())
 			return false;
 		else
 			return true;
 	}
-	auto curLetter = find_if(childrenBegin, childrenEnd, [wordBegin](Node* node) { return node->letter == tolower(*wordBegin); });
-	if (curLetter == childrenEnd)
+	char curLetter = tolower(*wordBegin);
+	auto nextNodeItr = findChildWithChar(curNode, curLetter);
+	if (nextNodeItr == curNode->children.end())
 		return false;
-	return checkInDict(*curLetter, wordBegin + 1, wordEnd);
+	return checkInDict(*nextNodeItr, wordBegin + 1, wordEnd);
+}
+
+std::vector<std::string> StudentSpellCheck::findSuggestions(Node* curNode, std::string curWord,
+	std::string::const_iterator wordBegin, std::string::const_iterator wordEnd, bool foundDiffer) const {
+	vector<string> suggestions;
+	if (wordBegin == wordEnd) {
+		if (findChildWithChar(curNode, '.') != curNode->children.end())
+			suggestions.push_back(curWord);
+		return suggestions;
+	}
+	char curLetter = tolower(*wordBegin);
+	auto nextNodeItr = findChildWithChar(curNode, curLetter);
+	if (nextNodeItr == curNode->children.end()) {
+		if (!foundDiffer)
+			for (auto child : curNode->children)
+				if (child->letter != '.') {
+					vector<string> childSuggestions(findSuggestions(child, curWord + child->letter, wordBegin + 1, wordEnd, true));
+					suggestions.insert(suggestions.end(), childSuggestions.begin(), childSuggestions.end());
+				}
+		return suggestions;
+	}
+	return findSuggestions(*nextNodeItr, curWord + curLetter, wordBegin + 1, wordEnd, foundDiffer);
+}
+
+bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::vector<std::string>& suggestions) {
+	if (checkInDict(m_wordTrie, word.begin(), word.end()))
+		return true;
+	suggestions = findSuggestions(m_wordTrie, "", word.begin(), word.end(), false);
+	return false;
 }
 
 void StudentSpellCheck::spellCheckLine(const std::string& line, std::vector<SpellCheck::Position>& problems) {
