@@ -25,6 +25,7 @@ private:
 	void resetTrie();
 	Node* giveNextNode(Node* curNode, char letter);
 	void printTrie(Node* node) const;
+	bool checkInDict(Node* curNode, std::string::const_iterator wordBegin, std::string::const_iterator wordEnd) const;
 };
 
 #endif  // STUDENTSPELLCHECK_H_

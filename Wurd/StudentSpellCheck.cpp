@@ -78,6 +78,46 @@ bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::v
 	return false; // TODO
 }
 
+bool StudentSpellCheck::checkInDict(Node* curNode, std::string::const_iterator wordBegin, std::string::const_iterator wordEnd) const {
+	auto begin = curNode->children.begin();
+	auto end = curNode->children.end();
+	if (wordBegin == wordEnd) {
+		if (find_if(begin, end, [](Node* node) { return node->letter == '.'; }) == end)
+			return false;
+		else
+			return true;
+	}
+	auto curLetter = find_if(begin, end, [wordBegin](Node* node) { return node->letter == tolower(*wordBegin); });
+	if (curLetter == end)
+		return false;
+	return checkInDict(*curLetter, wordBegin + 1, wordEnd);
+}
+
 void StudentSpellCheck::spellCheckLine(const std::string& line, std::vector<SpellCheck::Position>& problems) {
-	// TODO
+	problems.clear();
+	auto isAlphaApos = [](char ch) { return isalpha(ch) || ch == '\''; };
+	int wordStart = 0;
+	int wordEnd = 0;
+	int lineEnd = line.size();
+	while (wordStart < lineEnd) {
+		char wordFront = line.at(wordStart);
+		if (!isAlphaApos(wordFront))
+			wordStart++;
+		else {
+			wordEnd = wordStart;
+			while (wordEnd < lineEnd) {
+				char wordBack = line.at(wordEnd);
+				if (!isAlphaApos(wordBack))
+					break;
+				wordEnd++;
+			}
+			if (!checkInDict(m_wordTrie, line.begin() + wordStart, line.begin() + wordEnd)) {
+				SpellCheck::Position newPos;
+				newPos.start = wordStart;
+				newPos.end = wordEnd;
+				problems.push_back(newPos);
+			}
+			wordStart = wordEnd;
+		}
+	}
 }
