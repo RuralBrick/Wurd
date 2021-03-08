@@ -4,7 +4,7 @@
 #include <string>
 
 // Do not change anything in this file other than these initializer values
-const std::string DICTIONARYPATH = "dictionary.txt";
+const char* DICTIONARYPATH = "dictionary.txt";
 const int FOREGROUND_COLOR = COLOR_GREEN;
 const int BACKGROUND_COLOR = COLOR_BLACK;
 const int HIGHLIGHT_COLOR  = COLOR_YELLOW;
@@ -16,10 +16,10 @@ int main(int argc, char* argv[]) {
 	EditorGui editor(LINES, COLS);
 
 	if (!editor.loadDictionary(DICTIONARYPATH)) {
-		editor.writeStatus("Error: Can not load dictionary " + DICTIONARYPATH);
+		editor.writeStatus(std::string("Error: Can not load dictionary ") + DICTIONARYPATH);
 	}
 	if (argc == 2) {
 		editor.loadFileToEdit(argv[1]);
 	}
 	editor.run();
-}       
+}

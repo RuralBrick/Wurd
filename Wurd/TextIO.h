@@ -39,8 +39,8 @@ public:
 	}
 
 	enum COLOR {
-		WHITE = COLOR_WHITE,
-		RED = COLOR_RED
+		WHITE = 1,
+		RED = 2
 	};
 
 	static void print(char ch, COLOR fcolor = COLOR::WHITE) {
