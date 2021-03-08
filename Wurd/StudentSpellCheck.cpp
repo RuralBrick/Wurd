@@ -143,7 +143,7 @@ void StudentSpellCheck::spellCheckLine(const std::string& line, std::vector<Spel
 			if (!checkInDict(m_wordTrie, line.begin() + wordStart, line.begin() + wordEnd)) {
 				SpellCheck::Position newPos;
 				newPos.start = wordStart;
-				newPos.end = wordEnd;
+				newPos.end = wordEnd - 1;
 				problems.push_back(newPos);
 			}
 			wordStart = wordEnd;
