@@ -79,16 +79,16 @@ bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::v
 }
 
 bool StudentSpellCheck::checkInDict(Node* curNode, std::string::const_iterator wordBegin, std::string::const_iterator wordEnd) const {
-	auto begin = curNode->children.begin();
-	auto end = curNode->children.end();
+	auto childrenBegin = curNode->children.begin();
+	auto childrenEnd = curNode->children.end();
 	if (wordBegin == wordEnd) {
-		if (find_if(begin, end, [](Node* node) { return node->letter == '.'; }) == end)
+		if (find_if(childrenBegin, childrenEnd, [](Node* node) { return node->letter == '.'; }) == childrenEnd)
 			return false;
 		else
 			return true;
 	}
-	auto curLetter = find_if(begin, end, [wordBegin](Node* node) { return node->letter == tolower(*wordBegin); });
-	if (curLetter == end)
+	auto curLetter = find_if(childrenBegin, childrenEnd, [wordBegin](Node* node) { return node->letter == tolower(*wordBegin); });
+	if (curLetter == childrenEnd)
 		return false;
 	return checkInDict(*curLetter, wordBegin + 1, wordEnd);
 }
