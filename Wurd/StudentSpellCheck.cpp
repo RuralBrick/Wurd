@@ -128,7 +128,7 @@ bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::v
 
 void StudentSpellCheck::spellCheckLine(const std::string& line, std::vector<SpellCheck::Position>& problems) {
 	problems.clear();
-	auto isAlphaApos = [](char ch) { return isalpha(ch) || ch == '\''; };
+	auto isAlphaApos = [](char ch) { return isalpha(static_cast<unsigned char>(ch)) || ch == '\''; };
 	int wordStart = 0;
 	int wordEnd = 0;
 	int lineEnd = line.size();
