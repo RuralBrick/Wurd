@@ -38,7 +38,8 @@ bool StudentTextEditor::load(std::string file) {
 	reset();
 	string line;
 	while (getline(infile, line)) {
-		line.erase(remove_if(line.begin(), line.end(), [](char ch) { return ch == '\r' || ch == '\n'; }), line.end());
+		if (line.back() == '\r')
+			line.pop_back();
 		m_lines.push_back(line);
 		m_numLines++;
 	}
