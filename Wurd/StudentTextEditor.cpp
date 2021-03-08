@@ -81,10 +81,10 @@ void StudentTextEditor::insert(char ch) {
 }
 
 void StudentTextEditor::splitAtCursor() {
-	auto curLinePtr = m_curLine;
-	string newLine = curLinePtr->substr(m_col);
-	curLinePtr->erase(m_col);
-	m_curLine = m_lines.insert(++curLinePtr, newLine);
+	auto curLineItr = m_curLine;
+	string newLine = curLineItr->substr(m_col);
+	curLineItr->erase(m_col);
+	m_curLine = m_lines.insert(++curLineItr, newLine);
 }
 
 void StudentTextEditor::enter() {
@@ -102,10 +102,10 @@ char StudentTextEditor::eraseAtCursor() {
 }
 
 void StudentTextEditor::joinAtCursor() {
-	auto nextLinePtr = m_curLine;
-	string nextLine = *(++nextLinePtr);
+	auto nextLineItr = m_curLine;
+	string nextLine = *(++nextLineItr);
 	m_curLine->append(nextLine);
-	m_lines.erase(nextLinePtr);
+	m_lines.erase(nextLineItr);
 	m_numLines--;
 }
 
@@ -204,16 +204,16 @@ int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::stri
 	if (startRow < 0 || numRows < 0 || startRow > m_numLines)
 		return -1;
 
-	auto startRowPtr = m_curLine;
+	auto startRowItr = m_curLine;
 	int curRow = m_row;
-	moveToRow(startRowPtr, curRow, startRow);
+	moveToRow(startRowItr, curRow, startRow);
 
 	lines.clear();
 
 	int linesCopied = 0;
-	while (startRowPtr != m_lines.end() && curRow < m_numLines && linesCopied < numRows) {
-		lines.push_back(*startRowPtr);
-		startRowPtr++;
+	while (startRowItr != m_lines.end() && curRow < m_numLines && linesCopied < numRows) {
+		lines.push_back(*startRowItr);
+		startRowItr++;
 		curRow++;
 		linesCopied++;
 	}
