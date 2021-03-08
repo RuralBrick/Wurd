@@ -93,26 +93,32 @@ bool StudentSpellCheck::checkInDict(Node* curNode, std::string::const_iterator w
 	return checkInDict(*nextNodeItr, wordBegin + 1, wordEnd);
 }
 
-std::vector<std::string> StudentSpellCheck::findSuggestions(Node* curNode, std::string curWord,
+std::vector<std::string> StudentSpellCheck::findSuggestions(Node* curNode, std::string curSuggestion,
 	std::string::const_iterator wordBegin, std::string::const_iterator wordEnd, bool foundDiffer) const {
 	vector<string> suggestions;
-	if (wordBegin == wordEnd) {
+	if (wordBegin == wordEnd || curNode->letter == '.') {
 		if (findChildWithChar(curNode, '.') != curNode->children.end())
-			suggestions.push_back(curWord);
+			suggestions.push_back(curSuggestion);
 		return suggestions;
 	}
+
 	char curLetter = tolower(*wordBegin);
-	auto nextNodeItr = findChildWithChar(curNode, curLetter);
-	if (nextNodeItr == curNode->children.end()) {
-		if (!foundDiffer)
-			for (auto child : curNode->children)
-				if (child->letter != '.') {
-					vector<string> childSuggestions(findSuggestions(child, curWord + child->letter, wordBegin + 1, wordEnd, true));
-					suggestions.insert(suggestions.end(), childSuggestions.begin(), childSuggestions.end());
-				}
-		return suggestions;
+	if (!foundDiffer) {
+		for (auto child : curNode->children) {
+			if (child->letter != curLetter) {
+				vector<string> differSuggestions(findSuggestions(child, curSuggestion + child->letter, wordBegin + 1, wordEnd, true));
+				suggestions.insert(suggestions.end(), differSuggestions.begin(), differSuggestions.end());
+			}
+		}
 	}
-	return findSuggestions(*nextNodeItr, curWord + curLetter, wordBegin + 1, wordEnd, foundDiffer);
+
+	auto nextNodeItr = findChildWithChar(curNode, curLetter);
+	if (nextNodeItr != curNode->children.end()) {
+		vector<string> matchSuggestions(findSuggestions(*nextNodeItr, curSuggestion + curLetter, wordBegin + 1, wordEnd, foundDiffer));
+		suggestions.insert(suggestions.end(), matchSuggestions.begin(), matchSuggestions.end());
+	}
+
+	return suggestions;
 }
 
 bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::vector<std::string>& suggestions) {
