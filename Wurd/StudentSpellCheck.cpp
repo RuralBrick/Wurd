@@ -103,6 +103,11 @@ std::vector<std::string> StudentSpellCheck::findSuggestions(Node* curNode, std::
 	}
 
 	char curLetter = tolower(*wordBegin);
+	auto nextNodeItr = findChildWithChar(curNode, curLetter);
+	if (nextNodeItr != curNode->children.end()) {
+		vector<string> matchSuggestions(findSuggestions(*nextNodeItr, curSuggestion + curLetter, wordBegin + 1, wordEnd, foundDiffer));
+		suggestions.insert(suggestions.end(), matchSuggestions.begin(), matchSuggestions.end());
+	}
 	if (!foundDiffer) {
 		for (auto child : curNode->children) {
 			if (child->letter != curLetter) {
@@ -110,12 +115,6 @@ std::vector<std::string> StudentSpellCheck::findSuggestions(Node* curNode, std::
 				suggestions.insert(suggestions.end(), differSuggestions.begin(), differSuggestions.end());
 			}
 		}
-	}
-
-	auto nextNodeItr = findChildWithChar(curNode, curLetter);
-	if (nextNodeItr != curNode->children.end()) {
-		vector<string> matchSuggestions(findSuggestions(*nextNodeItr, curSuggestion + curLetter, wordBegin + 1, wordEnd, foundDiffer));
-		suggestions.insert(suggestions.end(), matchSuggestions.begin(), matchSuggestions.end());
 	}
 
 	return suggestions;
