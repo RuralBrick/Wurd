@@ -39,6 +39,7 @@ private:
 	char eraseAtCursor();
 	void splitAtCursor();
 	void joinAtCursor();
+	void ensureCurLineValid();
 
 };
 

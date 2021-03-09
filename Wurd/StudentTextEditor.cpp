@@ -60,7 +60,18 @@ void StudentTextEditor::reset() {
 	getUndo()->clear(); // O(N)
 }
 
+void StudentTextEditor::ensureCurLineValid() {
+	if (m_curLine == m_lines.end()) {
+		m_lines.push_back("");
+		m_curLine = m_lines.end();
+		m_curLine--;
+		m_col = 0;
+		m_numLines++;
+	}
+}
+
 void StudentTextEditor::insertAtCursor(char ch) {
+	ensureCurLineValid(); // O(1)
 	m_curLine->insert(m_col, 1, ch); // O(L)
 	m_col++;
 }
@@ -79,6 +90,7 @@ void StudentTextEditor::insert(char ch) {
 }
 
 void StudentTextEditor::splitAtCursor() {
+	ensureCurLineValid(); // O(1)
 	auto curLineItr = m_curLine;
 	string newLine = curLineItr->substr(m_col); // O(L)
 	curLineItr->erase(m_col); // O(L)
@@ -108,6 +120,8 @@ void StudentTextEditor::joinAtCursor() {
 }
 
 void StudentTextEditor::del() {
+	if (m_lines.empty())
+		return;
 	if (m_col < m_curLine->size()) {
 		char deletedChar = eraseAtCursor(); // O(L)
 		getUndo()->submit(Undo::Action::DELETE, m_row, m_col, deletedChar); // O(1)
@@ -119,6 +133,8 @@ void StudentTextEditor::del() {
 }
 
 void StudentTextEditor::backspace() {
+	if (m_lines.empty())
+		return;
 	if (m_col > 0) {
 		m_col--;
 		char deletedChar = eraseAtCursor(); // O(L)
@@ -134,6 +150,8 @@ void StudentTextEditor::backspace() {
 }
 
 void StudentTextEditor::move(Dir dir) {
+	if (m_lines.empty())
+		return;
 	switch (dir) {
 	case Dir::UP:
 		if (m_row > 0) {
@@ -231,6 +249,8 @@ void StudentTextEditor::moveCursor(int row, int col) {
 }
 
 void StudentTextEditor::undo() {
+	if (m_lines.empty())
+		return;
 	int row = m_row;
 	int col = m_col;
 	int count = 1;
