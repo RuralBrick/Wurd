@@ -124,11 +124,9 @@ std::vector<std::string> StudentSpellCheck::findSuggestions(Node* curNode, std::
 bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::vector<std::string>& suggestions) {
 	if (checkInDict(m_wordTrie, word.begin(), word.end()))
 		return true;
-	vector<string> possibleSuggestions(findSuggestions(m_wordTrie, "", word.begin(), word.end(), false));
-	auto suggestionsEnd = max_suggestions > possibleSuggestions.size() ?
-		possibleSuggestions.end() : possibleSuggestions.begin() + max_suggestions;
-	suggestions.clear();
-	suggestions.insert(suggestions.end(), possibleSuggestions.begin(), suggestionsEnd);
+	suggestions = findSuggestions(m_wordTrie, "", word.begin(), word.end(), false);
+	if (suggestions.size() > max_suggestions)
+		suggestions.resize(max_suggestions);
 	return false;
 }
 
