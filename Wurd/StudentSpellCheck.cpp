@@ -59,6 +59,7 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 	ifstream infile(dictionaryFile);
 	if (!infile)
 		return false;
+	resetTrie();
 	auto isNotAlphaApos = [](char ch) { return !(isalpha(static_cast<unsigned char>(ch)) || ch == '\''); };
 	string word;
 	while (getline(infile, word)) { // O(N)
