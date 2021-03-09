@@ -57,9 +57,10 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 	ifstream infile(dictionaryFile);
 	if (!infile)
 		return false;
+	auto isNotAlphaApos = [](char ch) { return !(isalpha(static_cast<unsigned char>(ch)) || ch == '\''); };
 	string word;
 	while (getline(infile, word)) {
-		word.erase(remove_if(word.begin(), word.end(), [](char ch) { return !(isalpha(ch) || ch == '\''); }), word.end());
+		word.erase(remove_if(word.begin(), word.end(), isNotAlphaApos), word.end());
 		if (word.size() >= 1) {
 			char curLetter = tolower(word.front());
 			Node* curNode = giveNextNode(m_wordTrie, curLetter);
