@@ -83,14 +83,14 @@ void StudentTextEditor::splitAtCursor() {
 	string newLine = curLineItr->substr(m_col); // O(L)
 	curLineItr->erase(m_col); // O(L)
 	m_curLine = m_lines.insert(++curLineItr, newLine); // O(1)
-}
-
-void StudentTextEditor::enter() {
-	splitAtCursor(); // O(L)
-	getUndo()->submit(Undo::Action::SPLIT, m_row, m_col); // O(1)
 	m_row++;
 	m_col = 0;
 	m_numLines++;
+}
+
+void StudentTextEditor::enter() {
+	getUndo()->submit(Undo::Action::SPLIT, m_row, m_col); // O(1)
+	splitAtCursor(); // O(L)
 }
 
 char StudentTextEditor::eraseAtCursor() {
