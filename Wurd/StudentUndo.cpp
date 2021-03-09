@@ -42,7 +42,7 @@ StudentUndo::Action StudentUndo::get(int &row, int &col, int& count, std::string
     switch (undoAction.action) {
     case Undo::Action::INSERT:
         row = undoAction.row;
-        col = undoAction.col;
+        col = undoAction.col - 1;
         count = undoAction.count;
         text = "";
         return Undo::Action::DELETE;
