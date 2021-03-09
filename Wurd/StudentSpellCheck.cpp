@@ -57,7 +57,6 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
 	ifstream infile(dictionaryFile);
 	if (!infile)
 		return false;
-	resetTrie();
 	string word;
 	while (getline(infile, word)) {
 		word.erase(remove_if(word.begin(), word.end(), [](char ch) { return !(isalpha(ch) || ch == '\''); }), word.end());
