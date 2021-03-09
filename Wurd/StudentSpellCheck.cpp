@@ -132,19 +132,19 @@ bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::v
 
 void StudentSpellCheck::spellCheckLine(const std::string& line, std::vector<SpellCheck::Position>& problems) {
 	problems.clear();
-	auto isAlphaApos = [](char ch) { return isalpha(static_cast<unsigned char>(ch)) || ch == '\''; };
+	auto isNotAlphaApos = [](char ch) { return !(isalpha(static_cast<unsigned char>(ch)) || ch == '\''); };
 	int wordStart = 0;
 	int wordEnd = 0;
 	int lineEnd = line.size();
 	while (wordStart < lineEnd) {
 		char wordFront = line.at(wordStart);
-		if (!isAlphaApos(wordFront))
+		if (isNotAlphaApos(wordFront))
 			wordStart++;
 		else {
 			wordEnd = wordStart;
 			while (wordEnd < lineEnd) {
 				char wordBack = line.at(wordEnd);
-				if (!isAlphaApos(wordBack))
+				if (isNotAlphaApos(wordBack))
 					break;
 				wordEnd++;
 			}
