@@ -26,6 +26,7 @@ public:
 	void undo();
 
 private:
+
 	std::list<std::string> m_lines;
 	std::list<std::string>::iterator m_curLine;
 	int m_row;
@@ -38,6 +39,7 @@ private:
 	char eraseAtCursor();
 	void splitAtCursor();
 	void joinAtCursor();
+
 };
 
 #endif // STUDENTTEXTEDITOR_H_

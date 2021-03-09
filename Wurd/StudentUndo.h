@@ -13,6 +13,7 @@ public:
 	void clear();
 
 private:
+
 	struct Entry {
 		Action action;
 		int row;
@@ -21,6 +22,7 @@ private:
 		std::string text;
 	};
 	std::stack<Entry> m_editorActions;
+
 };
 
 #endif // STUDENTUNDO_H_

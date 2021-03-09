@@ -8,19 +8,23 @@ Undo* createUndo()
 void StudentUndo::submit(const Action action, int row, int col, char ch) {
     if (!m_editorActions.empty()) {
         Entry& prevAction = m_editorActions.top();
-        if (prevAction.action == Undo::Action::DELETE && prevAction.row == row) {
+        // Prev action was a delete without line join
+        if (prevAction.action == Undo::Action::DELETE && action == Undo::Action::DELETE && prevAction.row == row) {
+            // Current action is del
             if (prevAction.col == col) {
-                prevAction.text.push_back(ch);
+                prevAction.text.push_back(ch); // O(1)
                 return;
             }
+            // Current action is backspace
             else if (prevAction.col == col + 1) {
                 prevAction.col--;
-                prevAction.text.insert(0, 1, ch);
+                prevAction.text.insert(0, 1, ch); // O(L)
                 return;
             }
         }
-        else if (prevAction.action == Undo::Action::INSERT && prevAction.row == row
-                 && prevAction.col + prevAction.count == col) {
+        // Prev action was insert and current action is contiguous insert
+        else if (prevAction.action == Undo::Action::INSERT && action == Undo::Action::INSERT
+                 && prevAction.row == row && prevAction.col + prevAction.count == col) {
             prevAction.count++;
             return;
         }
@@ -31,7 +35,7 @@ void StudentUndo::submit(const Action action, int row, int col, char ch) {
     newAction.col = col;
     newAction.count = 1;
     newAction.text = ch;
-    m_editorActions.push(newAction);
+    m_editorActions.push(newAction); // O(1)
 }
 
 StudentUndo::Action StudentUndo::get(int &row, int &col, int& count, std::string& text) {
@@ -44,31 +48,31 @@ StudentUndo::Action StudentUndo::get(int &row, int &col, int& count, std::string
         row = undoAction.row;
         col = undoAction.col - 1;
         count = undoAction.count;
-        text = "";
+        text = ""; // O(1)
         return Undo::Action::DELETE;
     case Undo::Action::DELETE:
         row = undoAction.row;
         col = undoAction.col;
         count = 1;
-        text = undoAction.text;
+        text = undoAction.text; // O(L)
         return Undo::Action::INSERT;
     case Undo::Action::SPLIT:
         row = undoAction.row;
         col = undoAction.col;
         count = 1;
-        text = "";
+        text = ""; // O(1)
         return Undo::Action::JOIN;
     case Undo::Action::JOIN:
         row = undoAction.row;
         col = undoAction.col;
         count = 1;
-        text = "";
+        text = ""; // O(1)
         return Undo::Action::SPLIT;
     }
     return Undo::Action::ERROR;
 }
 
 void StudentUndo::clear() {
-    while (!m_editorActions.empty())
+    while (!m_editorActions.empty()) // O(N)
         m_editorActions.pop();
 }
